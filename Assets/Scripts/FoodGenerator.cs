@@ -7,21 +7,37 @@ public class FoodGenerator : MonoBehaviour
     public GameObject foodPrefab;
 
     private MyGrid myGrid;
-    Node bottomLeft;
-    Node topRight;
+
+    private Reporter reporter;
 
     // Start is called before the first frame update
     void Start()
     {
         myGrid = GetComponent<MyGrid>();
 
-        bottomLeft = myGrid.NodeFromGridPos(0, 0);
-        topRight = myGrid.NodeFromGridPos(myGrid.GridSizeX-1, myGrid.GridSizeY-1);
+        reporter = transform.GetComponent<MyGameManager>().GetReporter();
+        reporter.FoodWasEaten += GenerateNewFood;
 
-        InvokeRepeating("Generate", 4, 4);
+        Invoke("GenerateNewFood", 2.0f);
     }
 
-    void Generate()
+    private void OnDestroy()
+    {
+        reporter.FoodWasEaten -= GenerateNewFood;
+    }
+
+    void GenerateNewFood()
+    {
+        bool foodWasGenerated = Generate();
+
+        // Se comida não foi gerada, então não há lugar para gerar comida. Logo, a cobra foi a vencedora
+        if (!foodWasGenerated)
+        {
+            reporter.InformSnakeWon();
+        }
+    }
+
+    bool Generate()
     {
         Node randomNode = myGrid.randomNode();
 
@@ -30,6 +46,10 @@ public class FoodGenerator : MonoBehaviour
             Instantiate(foodPrefab, randomNode.worldPosition, Quaternion.identity);
 
             myGrid.SetNodeIsEmpty(randomNode.worldPosition, false);
+
+            return true;
         }
+
+        return false;
     }
 }

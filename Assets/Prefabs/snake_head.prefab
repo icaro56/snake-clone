@@ -143,3 +143,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bodyPrefab: {fileID: 4757698460424394539, guid: ace1d429469fa304493d64bc7c7c7b04,
     type: 3}
+  myGrid: {fileID: 0}
+  speed: 1
+  waitTime: 0.3
