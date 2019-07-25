@@ -8,7 +8,6 @@ public class MyGrid : MonoBehaviour
     public bool displayGridGizmos;
     public Vector2 gridWorldSize;
     public float nodeRadius;
-    public GameObject debugObject;
 
     private int offsetY;
 

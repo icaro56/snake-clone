@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class Snake : MonoBehaviour
 {
@@ -49,36 +47,44 @@ public class Snake : MonoBehaviour
     {
         if (!dead)
         {
-            Vector2 v = transform.position;
+            Vector2 oldPosition = transform.position;
 
             transform.Translate(dir);
             oldDir = dir;
 
+            // informamos ao grid que a posição atual não está mais vazia
             myGrid.SetNodeIsEmpty(transform.position, false);
 
             if (collidedWithFood)
             {
-                GameObject g = Instantiate(bodyPrefab, v, Quaternion.identity);
+                GameObject g = Instantiate(bodyPrefab, oldPosition, Quaternion.identity);
                 tail.Insert(0, g.transform);
                 collidedWithFood = false;
-                myGrid.SetNodeIsEmpty(v, false);
+                myGrid.SetNodeIsEmpty(oldPosition, false);
             }
             else
             {
-                if (tail.Count > 0)
+                // se há calda
+                int tailCount = tail.Count;
+                if (tailCount > 0)
                 {
-                    myGrid.SetNodeIsEmpty(tail.Last().position, true);
+                    // informamos que a última posição da calda está vazia agora
+                    myGrid.SetNodeIsEmpty(tail[tailCount - 1].position, true);
 
-                    tail.Last().position = v;
+                    // configuramos o último nodo da calda para a antiga posição da cabeça da cobra
+                    tail[tailCount - 1].position = oldPosition;
 
-                    myGrid.SetNodeIsEmpty(v, false);
+                    // informamos que essa antiga posição da cabeça não está mais vazia
+                    myGrid.SetNodeIsEmpty(oldPosition, false);
 
-                    tail.Insert(0, tail.Last());
+                    // reordenamos nossa lista da calda
+                    tail.Insert(0, tail[tailCount-1]);
                     tail.RemoveAt(tail.Count - 1);
                 }
                 else
                 {
-                    myGrid.SetNodeIsEmpty(v, true);
+                    // informamos ao grid que a posição antiga está vazia agora
+                    myGrid.SetNodeIsEmpty(oldPosition, true);
                 }
             }
 
