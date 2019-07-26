@@ -94,7 +94,7 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void increaseSpeed()
+    public void increaseSpeed()
     {
         if (waitTime > 0.045f)
         {

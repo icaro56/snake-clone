@@ -6,6 +6,11 @@ public class GameMenuController : MonoBehaviour
 {
     public AudioClip startSound;
 
+    private void Awake()
+    {
+        Screen.SetResolution(1024, 768, false);
+    }
+
     // Update is called once per frame
     void Update()
     {
