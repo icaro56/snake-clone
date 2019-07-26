@@ -12,6 +12,8 @@ public class Snake : MonoBehaviour
     // tempo de espera para executar um novo movimento
     public float waitTime = 0.3f;
 
+    public AudioClip eatSound;
+
     private Vector2 dir;
     private Vector2 oldDir;
 
@@ -110,6 +112,8 @@ public class Snake : MonoBehaviour
     {
         if (collision.tag == "Food")
         {
+            SoundManager.instance.PlaySingle(eatSound);
+
             collidedWithFood = true;
             Destroy(collision.gameObject);
 

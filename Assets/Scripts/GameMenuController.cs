@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class GameMenuController : MonoBehaviour
 {
+    public AudioClip startSound;
+
     // Update is called once per frame
     void Update()
     {
@@ -16,6 +18,7 @@ public class GameMenuController : MonoBehaviour
 
     public void LoadMain()
     {
+        SoundManager.instance.PlaySingle(startSound);
         SceneManager.LoadScene("main");
     }
 }

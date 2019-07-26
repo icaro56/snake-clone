@@ -14,12 +14,19 @@ public class MyGameManager : MonoBehaviour
     public Text highValueText;
     public Text finalMessageText;
 
+    public AudioClip backgroundSound;
+
     private Reporter reporter;
 
     private void Awake()
     {
         finalMessageText.enabled = false;
         foodScore = 0;
+
+        if (PlayerPrefs.HasKey("highestScore"))
+        {
+            highScore = PlayerPrefs.GetInt("highestScore");
+        }
 
         reporter = GetComponent<Reporter>();
 
@@ -28,6 +35,8 @@ public class MyGameManager : MonoBehaviour
         reporter.FoodWasEaten += IncrementFoodValue;
 
         UpdateHud();
+
+        SoundManager.instance.PlayBackgroundSound(backgroundSound);
     }
 
     private void OnDestroy()
@@ -44,6 +53,8 @@ public class MyGameManager : MonoBehaviour
 
     IEnumerator backToMenu(float delay)
     {
+        SoundManager.instance.StopAllSounds();
+
         yield return new WaitForSeconds(delay);
 
         SceneManager.LoadScene("menu");
@@ -70,6 +81,8 @@ public class MyGameManager : MonoBehaviour
         foodScore++;
 
         highScore = foodScore > highScore ? foodScore : highScore;
+
+        PlayerPrefs.SetInt("highestScore", highScore);
 
         UpdateHud();
     }
